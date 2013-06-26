@@ -11,26 +11,232 @@
       + '\\u9999"]&query=' + q ;
   }
 
+  $(document).ready(function(){
+     
+     $("button.join").click( function(){
+ 
+   
+     });
+    
+
+     });
+  
+  function startit(){
+  var index="{{target}}";
+          var translationID= "{{current}}";
+                    
+
+    $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:5984/traduxio/b9484c9a44a64d6f6b6596da2f000c27",
+          accept: "application/json",
+          dataType: "json",
+          success: function(data) {
+                  var index=0;
+                  var t= data.translations[translationID].text;
+           
+                  if(t[index+1]==null){
+                $("#join{{.}}").hide();
+                  }
+                  else if(t[index+1]!=null) {
+                    $("#split{{.}}").hide();
+                  }
+          }
+  });
+}
+
+  function join() {
+     var index=0;
+     var translationID= "{{current}}";
+         $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:5984/traduxio/b9484c9a44a64d6f6b6596da2f000c27",
+          accept: "application/json",
+          dataType: "json",
+          success: function(data) {
+            var t= data.translations[translationID].text;
+            t[index] += "\n" +t[index+1] ;
+            t[index+1]=null;
+            place(data);
+          }
+        });
+  
+  }
+  
+ function Split(){
+          var index=0;
+          var translationID= "{{current}}";
+         $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:5984/traduxio/b9484c9a44a64d6f6b6596da2f000c27",
+          accept: "application/json",
+          dataType: "json",
+          success: function(data) {
+               
+                  var t= data.translations[translationID].text;
+                      t[index+1] +=  "";
+                   //   placeit(data);
+                      
+                  $('textarea').bind('paste', function () {
+                    placeit(data);
+                  });
+
+           //   <----MAKE TEXTAREAS AND CONFIRM BUTTON APPEAR------->
+               
+               
+               $('.target').wrap(function() {
+                return '<textarea rows="10" cols="50" >'+ $(this).text() +'</textarea >';
+               });
+             $('<textarea rows="5" cols="50" ></textarea >').appendTo('.translated');               
+             $('textarea').bind('paste', function () {
+                    placeit(data);
+                  });
+             
+            
+           }
+         });
+  }
+  
+  
+  function place(data){
+    $.ajax({
+       type: "PUT",
+       url: "http://127.0.0.1:5984/traduxio/b9484c9a44a64d6f6b6596da2f000c27",
+       contentType: "application/json",
+       data: JSON.stringify(data),
+       dataType: "json",
+       success: function(data){
+            window.location.reload(true);
+      }
+    });
+  }
+
+
+  function placeit(data) {
+ $.ajax({
+       type: "PUT",
+       url: "http://127.0.0.1:5984/traduxio/b9484c9a44a64d6f6b6596da2f000c27",
+       contentType: "application/json",
+       data: JSON.stringify(data),
+       dataType: "json",
+       success: function(data){
+            window.location.reload(true);
+            
+      }
+    });
+  }
   </script>
+  
+  </script>
+  <style>
+    button.join {
+      /*add conditionals later for IF there is already 2 lines*/
+      
+      color: #625B61;
+      
+    }
+    button.confirm {
+      color: #AB1010;
+      display: none;
+    }
+ 
+    button.split {
+      color: #0000ff;
+    }
+    textarea {
+      
+    }
+    table#master {
+      border: groove;
+       border-radius: 15px;
+      padding: 5;
+      text-align:justify;
+      text-justify:inter-word;
+       
+    }
+    tr#display:nth-child(even) {background: #CCC}
+      tr#display:nth-child(odd) {background: #FFF}
+    td.translated {
+      border:  thin;
+      border-top-color: #ffffff;
+       border-bottom-color: #ffffff;
+     }
+     table#master {
+      position:absolute;
+      left:100px;
+      top:150px;
+      width: 85%;
+     }
+     table#banner {
+      background: #a90329; /* Old browsers */
+      background: -moz-linear-gradient(top,  #a90329 0%, #8f0222 44%, #6d0019 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a90329), color-stop(44%,#8f0222), color-stop(100%,#6d0019)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* IE10+ */
+      background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 ); /* IE6-9 */
+      color: #ffffff;
+      position:absolute;
+      left:0px; 
+     }
+     a.auth {
+       color: #ABA9A9;
+     }
+     div#strip {
+      width: 100%;
+      background: #4c4c4c; /* Old browsers */
+      background: -moz-linear-gradient(top,  #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(12%,#595959), color-stop(25%,#666666), color-stop(39%,#474747), color-stop(50%,#2c2c2c), color-stop(51%,#000000), color-stop(60%,#111111), color-stop(76%,#2b2b2b), color-stop(91%,#1c1c1c), color-stop(100%,#131313)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* IE10+ */
+      background: linear-gradient(to bottom,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */\
+      color: #ABA9A9;
+      position:absolute;
+      left:0px;
+      top:88px;
+     }
+        div#up {
+      width: 100%;
+      background-color: #000000;
+      
+     }
+  </style>
 </head>
-<body>
-  <table>
+<body onload="startit()">
+
+  <table id="master" >
+    <tr><th>Translater: {{current}}</th><th></th></tr>
     {{#units}}
-    <tr>
-      <td>
-        {{#sources}}{{{.}}}<br/>{{/sources}}
+    <tr id="display">
+      <td class="original">
+        {{#sources}}{{{.}}} <BR> {{/sources}}
       </td>
-      <td>{{{target}}}</td>
+      <td class="translated" width="50%">  <BR>
+        <div class="target">{{{target}}}</div>
+      <td class="buttons">
+        
+
+      {{#action}}<button type="button" id="split{{.}}" class="split" onclick="Split()">Split </button> {{.}}
+                <button type="button" id="join{{.}}" class="join" onclick="join()">Join</button>{{/action}}
+        <!--        <button type="button" class="split" onclick="split()">Join</button> 
+       <button type="button" class="join" onclick="join()">Join</button> <br><br>
+        <button type="submit" class="confirm">CONFIRM</button>-->
+           </td> 
+
     </tr>
     {{/units}}
   </table>
   <p>
-    Autres traductions :
-    {{#others}}<a href="?translation={{{.}}}">{{.}}</a> {{/others}}
-  </p>
-  <form>
+   <table width="100%"id="banner"> <tr ></tr><td><h4>Autres traductions :&nbsp{{#others}}<a href="?translation={{{.}}}" class="auth">{{.}}</a> {{/others}}</h4></td><td> TRADUXIO</td></tr>
+                        <tr id="2emerow"><td> <form>
     <input id="query" type="text" />
     <button type="button" onclick="search()">Rechercher</button>  
-  </form>
+  </form></td></tr></table>
+   <div id="strip">.</div>
+  </p>
+ 
 </body>
 </html>

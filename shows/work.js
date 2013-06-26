@@ -25,20 +25,25 @@ function(o, req) {
   }
   var start = 0;
   var sources = [];
+  var action=[];
   for (var i = 0; i<TRANSLATION.length; i++) {
     if (TRANSLATION[i]!=null && i>start) {
       data.units.push({
         sources: sources,
-        target: toHtml(TRANSLATION[start])
+        target: toHtml(TRANSLATION[start]),
+        action: toHtml(TRANSLATION[start])
       });
       start = i;
       sources = [];
+      action = []; 
     }
     sources.push(toHtml(o.text[i]));
+    action.push(toHtml(o.text[i]));
   }
   data.units.push({
     sources: sources,
-    target: toHtml(TRANSLATION[start])
+    target: toHtml(TRANSLATION[start]),
+    action: toHtml(TRANSLATION[start])
   });
   return Mustache.to_html(templates.work, data);
 }
